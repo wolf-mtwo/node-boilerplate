@@ -34,6 +34,13 @@ class System {
 
   start() {
     return new Promise((response, reject) => {
+      app.use((err, req, res, next) => {
+        this.logger.error(err.stack);
+        res.status(err.status || 500)
+        res.json({
+          message: "err.message"
+        });
+      });
       this.server = http.createServer(app);
       this.server.listen(this.port);
       response(true);

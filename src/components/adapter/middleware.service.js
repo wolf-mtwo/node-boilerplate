@@ -1,99 +1,94 @@
-import _ from 'lodash';
+//const _ = require('lodash');
 
-export class MiddlewareService {
+class MiddlewareService {
 
   constructor(model) {
     this.model = model;
     this.model_name = this.model.model_name.toLowerCase();
   }
 
-  query(req, res, next) {
-    let query = req.query || {};
-    this.model.query(query)
-    .then((items) => {
+  async query(req, res, next) {
+    try {
+      let query = req.query || {};
+      const items = await this.model.query(query);
       res.json(items);
-    })
-    .catch((err) => {
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
-  pagination(req, res, next) {
-    let query = req.query || {};
-    this.model.pagination(query, req.page, req.limit)
-    .then((items) => {
+  async pagination(req, res, next) {
+    try {
+      let query = req.query || {};
+      const items = await this.model.pagination(query, req.page, req.limit);
       res.json(items);
-    }).catch((err) => {
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
-  pagination_short(req, res, next) {
-    let query = req.query || {};
-    this.model.pagination_short(query, req.page, req.limit, '-created')
-    .then((items) => {
+  async pagination_short(req, res, next) {
+    try {
+      let query = req.query || {};
+      const items = await this.model.pagination_short(query, req.page, req.limit, '-created');
       res.json(items);
-    })
-    .catch((err) => {
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
-  create(req, res, next) {
-    this.model.create(req.body)
-    .then((item) => {
+  async create(req, res, next) {
+    try {
+      const item = await this.model.create(req.body);
       res.json(item);
-    })
-    .catch((err) => {
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
   show(req, res) {
     res.json(req[this.model_name]);
   }
 
-  update(req, res, next) {
-    let item = req[this.model_name];
-    item = _.extend(item, req.body);
-    this.model.update(item)
-    .then((item) => {
-      res.json(item);
-    })
-    .catch((err) => {
+  async update(req, res, next) {
+    try {
+      let item = req[this.model_name];
+      item = _.extend(item, req.body);
+      const result = await this.model.update(item);
+      res.json(result);
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
-  remove(req, res, next) {
-    let data = req[this.model_name];
-    this.model.remove(data)
-    .then((item) => {
-      res.json(item);
-    })
-    .catch((err) => {
+  async remove(req, res, next) {
+    try {
+      let data = req[this.model_name];
+      //const item = await this.model.remove(data);
+      //res.json(item);
+      res.json({});
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
-  load(req, res, next, id) {
+  async load(req, res, next, id) {
     if (!id) {
       throw new Error('id is undefined');
     }
-    req.body[this.model_name] = id;
-    this.model.get_by_id(id)
-    .then((item) => {
+    try {
+      req.body[this.model_name] = id;
+      const item = await this.model.get_by_id(id);
       req[this.model_name] = item;
       next();
-    })
-    .catch((err) => {
+    } catch (err) {
       next(err);
-    });
+    }
   }
 
   page(req, res, next, id) {
     if (!id) {
-      throw new Error('id is undefined');
+      throw new Error('page is undefined');
     }
     req.page = parseInt(id);
     next();
@@ -101,9 +96,11 @@ export class MiddlewareService {
 
   limit(req, res, next, id) {
     if (!id) {
-      throw new Error('id is undefined');
+      throw new Error('limit is undefined');
     }
     req.limit = parseInt(id);
     next();
   }
 }
+
+module.exports = { MiddlewareService };

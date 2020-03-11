@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import log4js from 'log4js';
-import mongoose from 'mongoose';
+//const _ = require('lodash');
+const log4js = require('log4js');
+const mongoose = require('mongoose');
 
-export class Master {
+class Master {
 
   constructor(model_name) {
     if (!model_name) {
@@ -18,7 +18,8 @@ export class Master {
       throw new Error('id is empty');
     }
     return new Promise((resolve, reject) => {
-      this.Model.findById(id, (err, item) => {
+      this.Model.findById(id)
+      .exec((err, item) => {
         if (err) {
           reject(err);
         } if (!item) {
@@ -32,15 +33,7 @@ export class Master {
 
   create(data) {
     var item = new this.Model(data);
-    return new Promise((resolve, reject) => {
-      item.save((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(item);
-        }
-      });
-    });
+    return item.save();
   }
 
   update(item) {
@@ -151,3 +144,5 @@ export class Master {
     });
   }
 }
+
+module.exports = { Master };

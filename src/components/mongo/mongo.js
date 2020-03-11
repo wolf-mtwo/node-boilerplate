@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
-const config = require('./config');
+const config = require('../../config');
 const glob = require('glob');
 const log4js = require('log4js');
 
 let logger = log4js.getLogger('database');
-
 mongoose.Promise = global.Promise;
 
 class MongoDB {
 
   start() {
     return new Promise((response, reject) => {
-      mongoose.connect(config.db, function(err) {
-        if (err) reject(err);
+      mongoose.connect(config.db, { useUnifiedTopology: true, useNewUrlParser: true });
+      const db = mongoose.connection;
+      db.once('open', () => {
         response();
+      });
+      db.on('error', (err) => {
+        reject(err);
       });
     });
   }
