@@ -13,6 +13,7 @@ class MongoDB {
       mongoose.connect(config.db, { useUnifiedTopology: true, useNewUrlParser: true });
       const db = mongoose.connection;
       db.once('open', () => {
+        logger.info('mongodb has started');
         response();
       });
       db.on('error', (err) => {
