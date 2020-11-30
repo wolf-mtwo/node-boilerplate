@@ -1,0 +1,5 @@
+{
+  "secret": "a-message-secret",
+  "db": "mongodb://localhost/seed",
+  "port": "5000"
+}
