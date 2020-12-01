@@ -1,6 +1,7 @@
 const log4js = require('log4js');
 const { TOPICS } = require('../constants');
 const { Emitters } = require('./emitters');
+const { EventListener } = require('../listeners');
 
 const logger = log4js.getLogger('subscriber');
 
@@ -14,8 +15,8 @@ class Subscriber {
     const data = JSON.parse(message);
     switch (topic) {
       case TOPICS.NEW_DEVICE:
-        this.devices.push(data);
-        
+        EventListener.new_device(data)
+        .catch(console.log);
         Emitters.emit(
           TOPICS.START.replace('/+/', `/${data.d}/`), "{ r: 'wargos' }"
         );

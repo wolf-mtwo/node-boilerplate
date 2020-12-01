@@ -7,12 +7,12 @@ mongoose.model('Message', new Schema({
     type: String,
     default: () => { return v1(); }
   },
-  title: {
+  device_id: {
     type: String,
     required: true,
     trim: true
   },
-  description: {
+  hostname: {
     type: String,
     required: true,
     trim: true
