@@ -44,7 +44,7 @@
       });  
     })
     .done(() => {
-      console.log('second success');
+      console.log('success');
     })
     .fail((e) => {
       console.error(e);
@@ -53,6 +53,18 @@
 
   function move(device_id, speed, gpio) {
     console.log(device_id, speed, gpio);
+    $.ajax({
+      type: 'POST',
+      url: '/v1/messages/{0}/devices'.replace('{0}', device_id),
+      data: JSON.stringify({
+        speed,
+        gpio
+      }),
+      success: (data) => {
+        console.log('success');
+      },
+      contentType : 'application/json',
+    });
   }
 
 </script>

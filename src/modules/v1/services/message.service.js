@@ -41,6 +41,21 @@ class MessageService {
   static limit(req, res, next, id) {
     middleware.limit(req, res, next, id);
   }
+
+  static sync(req, res, next) {
+    try {
+      let device_id = req.params.device_id;
+      let body = req.body;
+      console.log(req.params);
+      console.log(req.body);
+      //const items = await this.model.query(query);
+      console.log(device_id);
+      console.log(body);
+      res.json({});
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = { MessageService };
