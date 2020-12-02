@@ -10,24 +10,46 @@
   <title>Devices</title>
 </head>
 <body>
+  <p>
+    <ul>
+      <li>D1 = GPIO 5</li>
+      <li>D2 = GPIO 4</li>
+      <li>D3 = GPIO 0</li>
+      <li>D4 = GPIO 2</li>
+    </ul>
+  </p>
   <div id="devices">
   </div>
+  <p>
+    <ul>
+      <li><a href="/nodemcu.jpg">Link documentacion</a></li>
+    </ul>
+  </p>
+  <h6>Trabajo por comida</h6>
 </body>
+<style>
+  h6 {
+    text-align: center;
+    color: rgb(207, 207, 207);
+  }
+</style>
 <script>
   $(() => {
     $.get('/v1/messages', (items) => {
       
-      var controls = [1, 2, 3, 4];
+      var controls = [5, 4, 0, 2];
       var speed = 5;
 
       items.forEach((item) => {
         $('#devices').append([
-          'Name: {0}'.replace('{0}', item.hostname),
-          '<div>',
+          '<div id="{0}">'.replace('{0}', item._id),
+          '<h3>Name: {0}</h3>'.replace('{0}', item.hostname),
+          '<button type="button" onclick="remove(\'{0}\')">Eliminar</button>'
+          .replace('{0}', item._id),
           controls.map((control, index) => {
             return [
             '<h3>{0} (GPIO {1})</k3>'
-            .replace('{0}', index)
+            .replace('{0}', index + 1)
             .replace('{1}', control),
             '<button type="button" onclick="move(\'{0}\', {1}, {2})">abrir</button>'
             .replace('{0}', item.device_id)
@@ -62,6 +84,22 @@
       }),
       success: (data) => {
         console.log('success');
+      },
+      contentType : 'application/json',
+    });
+  }
+
+  function remove(_id) {
+    if (!confirm('Are you sure?')) {
+      return;
+    }
+    $.ajax({
+      type: 'DELETE',
+      url: '/v1/messages/{0}'.replace('{0}', _id),
+      data: JSON.stringify({}),
+      success: (data) => {
+        console.log('success');
+        $('#{0}'.replace('{0}',_id)).empty();
       },
       contentType : 'application/json',
     });

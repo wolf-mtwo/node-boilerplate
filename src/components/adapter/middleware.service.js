@@ -64,9 +64,8 @@ class MiddlewareService {
   async remove(req, res, next) {
     try {
       let data = req[this.model_name];
-      //const item = await this.model.remove(data);
-      //res.json(item);
-      res.json({});
+      const item = await this.model.remove(data);
+      res.json(item);
     } catch (err) {
       next(err);
     }

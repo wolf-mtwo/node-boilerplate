@@ -14,7 +14,7 @@ class Emitters {
       throw new Error('Channel is not specified');
     }
     logger.debug(`emit: ${channel} message: ${JSON.stringify(data)}`);
-    mqtt_client.publish(channel, data);
+    mqtt_client.publish(channel, JSON.stringify(data));
   }
 }
 

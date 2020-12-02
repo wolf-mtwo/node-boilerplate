@@ -1,4 +1,5 @@
 const { Message } = require('../models/message');
+const { Emitters } = require('../../../components');
 const { MiddlewareService } = require('../../../components/adapter/middleware.service');
 
 let model = new Message();
@@ -46,11 +47,12 @@ class MessageService {
     try {
       let device_id = req.params.device_id;
       let body = req.body;
-      console.log(req.params);
-      console.log(req.body);
-      //const items = await this.model.query(query);
       console.log(device_id);
       console.log(body);
+      Emitters.emit(`/v1/${device_id}/servo`, {
+        a: body.speed.toString(),
+        g: body.gpio.toString()
+      });
       res.json({});
     } catch (err) {
       next(err);

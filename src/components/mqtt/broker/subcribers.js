@@ -18,7 +18,7 @@ class Subscriber {
         EventListener.new_device(data)
         .catch(console.log);
         Emitters.emit(
-          TOPICS.START.replace('/+/', `/${data.d}/`), "{ r: 'wargos' }"
+          TOPICS.START.replace('/+/', `/${data.d}/`), { r: 'wargos' }
         );
         break;
       case TOPICS.HEARTBEAT:
