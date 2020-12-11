@@ -58,6 +58,23 @@ class MessageService {
       next(err);
     }
   }
+
+  static portion(req, res, next) {
+    try {
+      let device_id = req.params.device_id;
+      let body = req.body;
+      console.log(device_id);
+      console.log(body);
+      Emitters.emit(`/v1/${device_id}/servo-portion`, {
+        p: body.portion.toString(),
+        a: "t",
+        g: body.gpio.toString()
+      });
+      res.json({});
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = { MessageService };

@@ -20,6 +20,8 @@
   </p>
   <div id="devices">
   </div>
+  <br />
+  <br />
   <p>
     <ul>
       <li><a href="/nodemcu.jpg">Link documentacion</a></li>
@@ -62,6 +64,14 @@
             .replace('{0}', item.device_id)
             .replace('{1}', speed * -1)
             .replace('{2}', control),
+            '<button type="button" onclick="portion(\'{0}\', {1}, {2})">30P</button>'
+            .replace('{0}', item.device_id)
+            .replace('{1}', 30)
+            .replace('{2}', control),
+            '<button type="button" onclick="portion(\'{0}\', {1}, {2})">45P</button>'
+            .replace('{0}', item.device_id)
+            .replace('{1}', 30)
+            .replace('{2}', control),
             ].join('');
           }).join(''),
           '</div>',
@@ -83,6 +93,22 @@
       url: '/v1/messages/{0}/devices'.replace('{0}', device_id),
       data: JSON.stringify({
         speed,
+        gpio
+      }),
+      success: (data) => {
+        console.log('success');
+      },
+      contentType : 'application/json',
+    });
+  }
+
+  function portion(device_id, portion, gpio) {
+    console.log(device_id, portion, gpio);
+    $.ajax({
+      type: 'POST',
+      url: '/v1/messages/{0}/portion'.replace('{0}', device_id),
+      data: JSON.stringify({
+        portion,
         gpio
       }),
       success: (data) => {
